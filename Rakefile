@@ -10,6 +10,10 @@ begin
     gem.email = "x@nofxx.com"
     gem.homepage = "http://github.com/nofxx/bugs_bunny"
     gem.authors = ["Marcos Piccinini"]
+
+    gem.add_dependency "amqp", ">=0.6.7"
+    gem.add_dependency "thor", ">=0.13.4"
+
     gem.add_development_dependency "rspec", ">= 1.2.9"
     gem.add_development_dependency "cucumber", ">= 0"
     # gem is a Gem::Specification... see http://www.rubygems.org/read/chapter/20 for additional settings

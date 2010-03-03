@@ -1,0 +1,7 @@
+:vhost: nanite
+:host: localhost
+:port: 5672
+:user:
+:pass:
+:timeout:
+:logging: false

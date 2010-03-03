@@ -1,0 +1,40 @@
+#!/usr/bin/env ruby
+$LOAD_PATH.unshift(File.join(File.dirname(__FILE__), '..', 'lib'))
+require 'rubygems'
+require 'optparse'
+require 'bugs_bunny'
+
+opt = OptionParser.new do |o|
+    o.banner = <<BANNER
+Bugs Bunny - RabbitMQ Playground
+
+Usage: #{File.basename($0)} command [args]
+
+Commands:
+
+   vhosts       -   List vhosts
+   users        -   List and filter items
+   queues       -   Order by: name, price, store.
+   clear        -   Wipe out mnesia
+   config       -   "Generates a config file for AMQP connection
+
+Common usage:
+
+   pyradise queue foo
+
+Options:
+
+BANNER
+  o.on('-c CONFIG', "Config file path") { |path| Opt[:config] = path }
+  o.on('-p PATH', "Output path for config file") { |path| Opt[:out] = path }
+  o.on('-v', "Verbose") { |b| Opt[:verbose] = true }
+  o.on('-f', "Force") { |b| Opt[:force] = true }
+  o.on('-h') { puts o; exit }
+  o.parse!
+end
+
+if ARGV.empty?
+  puts opt
+else
+  BugsBunny::CLI.new(ARGV)
+end
