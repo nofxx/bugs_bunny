@@ -19,7 +19,8 @@ module BugsBunny
     end
 
     def initialize(*params)
-      @name, d, a,_,_,@msgs,_,_,@users, @transactions, @mem = *params
+      @name, d, a,_,_,ready,_,all,@users, @transactions, @mem = *params
+      @msgs = ready.to_i + all.to_i
       @durable = eval(d) if d #ugly
       @auto_delete = eval(a) if a #more ugly
       @mq = MQ.queue(@name, :passive => true)
@@ -40,7 +41,7 @@ module BugsBunny
 
     def inspect
       puts ""
-      @mq.subscribe(:ack => true) do |h, body| #, :nowait => false
+      @mq.bind(MQ.fanout(@name)).subscribe(:ack => true) do |h, body| #, :nowait => false
         puts "-------\n"
         print "QUEUE #{h.delivery_tag} (#{h.content_type}): "
         print "Redelivered " if h.redelivered
