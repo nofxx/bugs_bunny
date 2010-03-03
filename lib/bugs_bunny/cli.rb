@@ -1,7 +1,7 @@
 # Command Line Stuff
 require 'yaml'
 begin # Needed (really?) for ruby 1.8
- # require 'ftools'
+  require 'ftools'
 rescue LoadError
 end
 
@@ -34,7 +34,7 @@ module BugsBunny
         puts "Config file already exists"
         exit
       else
-        File.copy(File.dirname(__FILE__) + "/#{CONFIG_FILE}", path)
+        FileUtils.copy(File.dirname(__FILE__) + "/#{CONFIG_FILE}", path)
         puts "Copied config file to #{path}"
       end
     end
@@ -46,17 +46,17 @@ module BugsBunny
       puts *args
     end
 
-    def config_exists?(path, name = CONFIG_FILE)
-      File.exists?(path + name)
+    def config_exists?(path)
+      File.exists?(path + CONFIG_FILE)
     end
 
     def parse_config
       unless file = Opt[:config]
         file = ["", "config/"].select { |p| config_exists?(p) }[0]
-        file += CONFIG_FILE
+        file += CONFIG_FILE if file
       end
-      unless File.exists?(file)
-        puts "No config file"; exit
+      unless file && File.exists?(file)
+        puts "No config file.\nCreate one with 'config'"; exit
       end
       Opt[:rabbit].merge! YAML.load(File.read(file))
     end

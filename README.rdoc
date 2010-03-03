@@ -1,16 +1,45 @@
-= bugs_bunny
+= Bugs Bunny
 
-Description goes here.
+RabbitMQ Playground
+
+== Qual é o pó, doutor?
+
+Run 'bbunny config' to create a rabbitmq.yml conf file, edit it, play.
+
+
+=== bbunny queues
+
+Lists all queues in the vhost.
+
+
+=== bbunny queues new works
+
+Create a queue 'works'.
+
+
+=== bbunny queue works add "Improve Bugs Bunny"
+
+Add a message to the queue.
+
+
+=== bbunny queue works pop
+
+Pop a message from the queue.
+
+
+=== bbunny queue works inspect
+
+Live inspection of the queue.
+
+
+Check out -h for all commands.
 
 == Note on Patches/Pull Requests
- 
+
 * Fork the project.
 * Make your feature addition or bug fix.
-* Add tests for it. This is important so I don't break it in a
-  future version unintentionally.
-* Commit, do not mess with rakefile, version, or history.
-  (if you want to have your own version, that is fine but bump version in a commit by itself I can ignore when I pull)
-* Send me a pull request. Bonus points for topic branches.
+* Add and run our cli cuke suite ;)
+* Send me a pull request.
 
 == Copyright
 

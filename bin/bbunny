@@ -14,21 +14,27 @@ Commands:
 
    vhosts       -   List vhosts
    users        -   List and filter items
-   queues       -   Order by: name, price, store.
+   queues       -   List queues
+     new        -   Create a new queue
+     purge      -   Purge all queues
+     delete     -   Remove all the queues closing all connections
+   queue        -   Expects the queue name
+     add        -   Create a new message on the queue
+     pop        -   Pop a message from the queue
+     list       -   Snapshot of the queue
+     inspect    -   Live view
+     purge      -   Purge a queue
+     delete     -   Remove the queue closing all connections
    clear        -   Wipe out mnesia
-   config       -   "Generates a config file for AMQP connection
-
-Common usage:
-
-   pyradise queue foo
+   config       -   Generates a config file for the AMQP connection
 
 Options:
 
 BANNER
   o.on('-c CONFIG', "Config file path") { |path| Opt[:config] = path }
   o.on('-p PATH', "Output path for config file") { |path| Opt[:out] = path }
-  o.on('-v', "Verbose") { |b| Opt[:verbose] = true }
-  o.on('-f', "Force") { |b| Opt[:force] = true }
+  o.on('-v', "--verbose") { |b| Opt[:verbose] = true }
+  o.on('-f', "--force") { |b| Opt[:force] = true }
   o.on('-h') { puts o; exit }
   o.parse!
 end
