@@ -2,6 +2,7 @@
 
 RabbitMQ Playground
 
+
 == Qual é o pó, doutor?
 
 Run 'bbunny config' to create a rabbitmq.yml conf file, edit it, play.
@@ -11,28 +12,63 @@ Run 'bbunny config' to create a rabbitmq.yml conf file, edit it, play.
 
 Lists all queues in the vhost.
 
+    works  (volatile): 0 messages
+    todo   (volatile): 0 messages
+
 
 === bbunny queues new works
 
-Create a queue 'works'.
+Creates a queue 'works'.
 
 
-=== bbunny queue works add "Improve Bugs Bunny"
+=== bbunny queue works add "Nice message"
 
-Add a message to the queue.
+Adds a message to the queue.
 
 
 === bbunny queue works pop
 
-Pop a message from the queue.
+Pops a message from the queue.
+
+    Pop => MQ::Header...
+    Body => "Improve Bugs Bunny"
 
 
 === bbunny queue works inspect
 
 Live inspection of the queue.
 
+    -------
+    QUEUE 1 (application/octet-stream): Mode 1
+    Consumer: todo-908051891800 Exchange:
 
-Check out -h for all commands.
+    Body:
+    Improve Bugs Bunny
+
+    -------
+    QUEUE 2 (application/octet-stream): Mode 1
+    Consumer: todo-908051891800 Exchange:
+
+    Body:
+    {:ruby => "object"}
+
+
+=== Check out -h for all commands
+
+Purge, delete, full CRUD ;)
+
+
+== Marshal/JSON
+
+Bugs Bunny will try to load your data using Marshal.
+You may define json on the conf file.
+
+
+=== Nanite
+
+Bugs Bunny will load the nanite gem if you have it avaiable.
+So you can Unmarshal it's objects.
+
 
 == Note on Patches/Pull Requests
 
