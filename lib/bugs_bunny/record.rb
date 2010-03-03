@@ -1,6 +1,23 @@
 module BugsBunny
   class Record
     attr_reader :name, :msgs, :users
+    @records = []
+
+    def self.all
+      # possible with amqp?
+      `rabbitmqctl list_queues -p #{Opt[:rabbit][:vhost]} name durable auto_delete arguments node messages_ready messages_unacknowledged messages_uncommitted messages consumers transactions memory`.split("\n").each do |l|
+        next if l =~ /Listing|\.\./
+        @records << BugsBunny::Record.new(*l.split("\t"))
+      end
+      @records
+    end
+
+    def self.create(name)
+      MQ.queue(name).status do |msg, users|
+        puts "#{msg} messages, #{users} consumers."
+      end
+    end
+
     def initialize(*params)
       @name, d, a,_,_,@msgs,_,_,@users, @transactions, @mem = *params
       @durable = eval(d) if d #ugly
@@ -16,36 +33,53 @@ module BugsBunny
       halt
     end
 
+    def list
+      inspect
+      EM.add_timer(1) { halt }
+    end
+
     def inspect
       puts ""
-      @mq.subscribe(:ack => true, :nowait => false) do |header, body|
-        puts "QUEUE #{header.delivery_tag}: #{header.inspect}"
-        txt = Marshal.load(body) rescue body
+      @mq.subscribe(:ack => true) do |h, body| #, :nowait => false
+        puts "-------\n"
+        print "QUEUE #{h.delivery_tag} (#{h.content_type}): "
+        print "Redelivered " if h.redelivered
+        puts  "Mode #{h.delivery_mode}"
+        puts  "Consumer: #{h.consumer_tag} Exchange: #{h.exchange}"
+        txt = read(body)
         puts "\nBody:"
         puts txt
         puts
-        puts "--\n"
       end
     end
+    alias :live :inspect
+
+    def add(txt)
+      @mq.publish(txt)
+      halt
+    end
+    alias :publish :add
+
+    def pop
+      @mq.pop do |h, b|
+        puts "Pop => #{h}\n Body => #{b}" if b
+        halt
+      end
+    end
+    alias :get :pop
 
     def purge
-      puts "Purging #{name}.."
+      print "Purging #{name}... "
       @mq.purge
-      puts "Done."
+      print "Done.\n"
       halt
     end
     alias :clean :purge
 
-    def pop
-      @mq.pop do |h, body|
-        if body
-          puts "Pop => #{h}"
-          puts "Body => #{b}"
-        end
-        halt
-      end
+    def delete
+      @mq.delete #:if_empty, if_unused, :no_wait
+      halt
     end
-
 
     def to_s
       "#{@name} #{durable}: #{@msgs} messages"
@@ -56,6 +90,16 @@ module BugsBunny
     end
 
     private
+
+    def read(dump, mode=:marshal)
+      case mode
+      when :marshal then Marshal.load(dump)
+      when :json    then JSON.load(dump)
+      else dump
+      end
+    rescue
+      dump
+    end
 
     def durable
       @durable ? "Durable" : "Volatile"

@@ -1,7 +1,7 @@
 When /^I run "([^\"]*)"$/ do |comm|
-  @cmd = `bin/bbunny #{comm}`
+  @out = `bin/bbunny #{comm}`
 end
 
 Then /^I should see "([^\"]*)"$/ do |args|
-  @cmd.should match(args)
+  @out.should match(args)
 end

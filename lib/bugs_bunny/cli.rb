@@ -42,7 +42,7 @@ module BugsBunny
     private
 
     def log(*args)
-      #return unless Opt[:verbose]
+      return unless Opt[:verbose]
       puts *args
     end
 

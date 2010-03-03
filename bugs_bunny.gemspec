@@ -5,13 +5,13 @@
 
 Gem::Specification.new do |s|
   s.name = %q{bugs_bunny}
-  s.version = "0.0.2"
+  s.version = "0.0.7"
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["Marcos Piccinini"]
   s.date = %q{2010-03-03}
   s.default_executable = %q{bbunny}
-  s.description = %q{TODO: longer description of your gem}
+  s.description = %q{Play/Manage RabbitMQ. Vhosts, queues.}
   s.email = %q{x@nofxx.com}
   s.executables = ["bbunny"]
   s.extra_rdoc_files = [
@@ -27,15 +27,19 @@ Gem::Specification.new do |s|
      "VERSION",
      "bin/bbunny",
      "bugs_bunny.gemspec",
+     "cucumber.yml",
      "features/bugs_bunny.feature",
+     "features/queues.feature",
      "features/step_definitions/bugs_bunny_steps.rb",
+     "features/step_definitions/queue_steps.rb",
      "features/support/env.rb",
      "lib/bugs_bunny.rb",
      "lib/bugs_bunny/cli.rb",
      "lib/bugs_bunny/rabbit.rb",
      "lib/bugs_bunny/rabbitmq.yml",
      "lib/bugs_bunny/record.rb",
-     "rabbitmq.yml",
+     "spec/bugs_bunny/cli_spec.rb",
+     "spec/bugs_bunny/rabbit_spec.rb",
      "spec/bugs_bunny_spec.rb",
      "spec/spec.opts",
      "spec/spec_helper.rb"
@@ -44,9 +48,11 @@ Gem::Specification.new do |s|
   s.rdoc_options = ["--charset=UTF-8"]
   s.require_paths = ["lib"]
   s.rubygems_version = %q{1.3.6}
-  s.summary = %q{TODO: one-line summary of your gem}
+  s.summary = %q{Play/Manage RabbitMQ}
   s.test_files = [
-    "spec/bugs_bunny_spec.rb",
+    "spec/bugs_bunny/cli_spec.rb",
+     "spec/bugs_bunny/rabbit_spec.rb",
+     "spec/bugs_bunny_spec.rb",
      "spec/spec_helper.rb"
   ]
 
@@ -56,18 +62,15 @@ Gem::Specification.new do |s|
 
     if Gem::Version.new(Gem::RubyGemsVersion) >= Gem::Version.new('1.2.0') then
       s.add_runtime_dependency(%q<amqp>, [">= 0.6.7"])
-      s.add_runtime_dependency(%q<thor>, [">= 0.13.4"])
       s.add_development_dependency(%q<rspec>, [">= 1.2.9"])
       s.add_development_dependency(%q<cucumber>, [">= 0"])
     else
       s.add_dependency(%q<amqp>, [">= 0.6.7"])
-      s.add_dependency(%q<thor>, [">= 0.13.4"])
       s.add_dependency(%q<rspec>, [">= 1.2.9"])
       s.add_dependency(%q<cucumber>, [">= 0"])
     end
   else
     s.add_dependency(%q<amqp>, [">= 0.6.7"])
-    s.add_dependency(%q<thor>, [">= 0.13.4"])
     s.add_dependency(%q<rspec>, [">= 1.2.9"])
     s.add_dependency(%q<cucumber>, [">= 0"])
   end

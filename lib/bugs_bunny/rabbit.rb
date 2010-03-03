@@ -4,7 +4,6 @@ module BugsBunny
   class Rabbit
 
     def initialize(params=nil)
-      @records = []
     end
 
     def start!(command)
@@ -16,27 +15,33 @@ module BugsBunny
       puts `rabbitmqctl list_vhosts`
     end
 
-    def queues
-      # possible with amqp?
-      `rabbitmqctl list_queues -p /nanite name durable auto_delete arguments node messages_ready messages_unacknowledged messages_uncommitted messages consumers transactions memory`.split("\n").each do |l|
-        next if l =~ /Listing|\.\./
-        @records << BugsBunny::Record.new(*l.split("\t"))
+    def queues(param=nil,name=nil)
+      if param == "new"
+        return halt("new <name>") unless name
+        BugsBunny::Record.create(name)
+        return halt
       end
-      print_table "Queues", @records.sort_by { |r| r.msgs }
+      qs = BugsBunny::Record.all
+      unless param
+        print_table "Queues", qs.sort_by { |r| r.msgs }
+      else
+        qs.each(&:"#{param}")
+      end
       halt
+    end
+
+    def queue(q, action="info", *params)
+      rec = BugsBunny::Record.new(q)
+      if rec.respond_to?(action)
+        rec.send(action, *params)
+      else
+        puts "No such action for queues."
+        halt
+      end
     end
 
     def exchanges
       print_table "Queues", @mq.exchanges
-    end
-
-    def queue(q, action="info")
-      rec = BugsBunny::Record.new(q)
-      if rec.respond_to?(action)
-        rec.send(action)
-      else
-        puts "No such action for queues."
-      end
     end
 
     def print_table(title, arr)
@@ -47,14 +52,16 @@ module BugsBunny
       end
     end
 
-    def halt
-      BugsBunny::Rabbit.halt
+    def halt(msg=nil)
+      BugsBunny::Rabbit.halt(msg)
     end
 
-    def self.halt
-      puts
+    def self.halt(msg=nil)
+      puts msg if msg
       MQ.queues{ |q| q.unsubscribe }
       AMQP.stop { EM.stop }
+      #EM.stop_event_loop
+      #exit
     end
 
     trap("INT") { halt }
