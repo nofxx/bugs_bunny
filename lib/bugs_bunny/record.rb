@@ -9,10 +9,11 @@ module BugsBunny
     end
 
     def info
+      puts "About #{@name}"
       @mq.status do |msg, users|
         puts "#{msg} messages, #{users} consumers."
       end
-      AMQP.stop { EM.stop }
+      halt
     end
 
     def inspect
@@ -28,14 +29,40 @@ module BugsBunny
     end
 
     def purge
+      puts "Purging #{name}.."
+      @mq.purge
+      puts "Done."
+      halt
     end
+    alias :clean :purge
+
+    def pop
+      @mq.pop do |h, body|
+        if body
+          puts "Pop => #{h}"
+          puts "Body => #{b}"
+        end
+        halt
+      end
+    end
+
+
+    def to_s
+      "#{@name} #{durable}: #{@msgs} messages"
+    end
+
+    def <=>(other)
+      @name <=> other.name
+    end
+
+    private
 
     def durable
       @durable ? "Durable" : "Volatile"
     end
 
-    def to_s
-      "#{@name} #{durable}: #{@msgs} messages"
+    def halt
+      BugsBunny::Rabbit.halt
     end
 
   end

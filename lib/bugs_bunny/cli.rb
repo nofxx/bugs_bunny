@@ -1,7 +1,7 @@
 # Command Line Stuff
 require 'yaml'
-begin
-  require 'ftools'
+begin # Needed (really?) for ruby 1.8
+ # require 'ftools'
 rescue LoadError
 end
 
@@ -14,17 +14,19 @@ module BugsBunny
         send(*argv)
       else
         parse_config
-        conn = BugsBunny::Rabbit.new
-        unless conn.respond_to?(argv[0])
+        rb = BugsBunny::Rabbit.new
+        unless rb.respond_to?(argv[0])
           puts "Can`t do that."; exit
         end
         log "Connecting to rabbitmq #{Opt[:rabbit][:vhost]}"
         AMQP.start(Opt[:rabbit]) do
-          conn.start!(argv)
+          rb.start!(argv)
         end
       end
     end
 
+    # Write down a yml in ./ or config/ for ease use with
+    # bugs and on the
     def config
       path = "./"
       path = "config/" if File.exists?("config/")

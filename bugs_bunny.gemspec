@@ -5,7 +5,7 @@
 
 Gem::Specification.new do |s|
   s.name = %q{bugs_bunny}
-  s.version = "0.0.1"
+  s.version = "0.0.2"
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["Marcos Piccinini"]
@@ -25,10 +25,17 @@ Gem::Specification.new do |s|
      "README.rdoc",
      "Rakefile",
      "VERSION",
+     "bin/bbunny",
+     "bugs_bunny.gemspec",
      "features/bugs_bunny.feature",
      "features/step_definitions/bugs_bunny_steps.rb",
      "features/support/env.rb",
      "lib/bugs_bunny.rb",
+     "lib/bugs_bunny/cli.rb",
+     "lib/bugs_bunny/rabbit.rb",
+     "lib/bugs_bunny/rabbitmq.yml",
+     "lib/bugs_bunny/record.rb",
+     "rabbitmq.yml",
      "spec/bugs_bunny_spec.rb",
      "spec/spec.opts",
      "spec/spec_helper.rb"

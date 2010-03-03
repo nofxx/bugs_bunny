@@ -14,7 +14,6 @@ module BugsBunny
 
     def vhosts
       puts `rabbitmqctl list_vhosts`
-      halt
     end
 
     def queues
@@ -24,6 +23,7 @@ module BugsBunny
         @records << BugsBunny::Record.new(*l.split("\t"))
       end
       print_table "Queues", @records.sort_by { |r| r.msgs }
+      halt
     end
 
     def exchanges
@@ -31,38 +31,34 @@ module BugsBunny
     end
 
     def queue(q, action="info")
-      puts "Stats for queue #{q}:"
       rec = BugsBunny::Record.new(q)
       if rec.respond_to?(action)
         rec.send(action)
       else
         puts "No such action for queues."
       end
-#      halt
     end
 
     def print_table(title, arr)
-      halt if arr.empty?
+      return if arr.empty?
       puts title
       arr.each do |q|
         puts q
       end
-      halt
     end
-
 
     def halt
-      MQ.queues{ |q| q.unsubscribe }
-      AMQP.stop { EM.stop }
-      # EM.stop_event_loop
-      #Messaging.amqp.close { EM.stop }
-      # MQ.queues.
+      BugsBunny::Rabbit.halt
     end
 
-    trap("INT") do
-      puts "\nClosing.."
-      AMQP.stop{ EM.stop }
+    def self.halt
+      puts
+      MQ.queues{ |q| q.unsubscribe }
+      AMQP.stop { EM.stop }
     end
+
+    trap("INT") { halt }
+    trap("TERM") { halt }
 
   end
 

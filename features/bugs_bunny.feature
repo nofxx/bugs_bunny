@@ -4,6 +4,7 @@ Feature: something something
   something something something
 
   Scenario: something something
-    Given inspiration
-    When I create a sweet new gem
-    Then everyone should see how awesome I am
+    #Given inspiration
+    #When I create a sweet new gem
+    #Then everyone should see how awesome I am
+ 

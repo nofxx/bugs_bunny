@@ -1,7 +1,7 @@
-:vhost: nanite
+:vhost: /nanite
 :host: localhost
 :port: 5672
-:user:
-:pass:
-:timeout:
+:user: mapper
+:pass: testing
+:timeout: 5
 :logging: false
