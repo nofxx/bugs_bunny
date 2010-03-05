@@ -1,7 +1,7 @@
 module BugsBunny
   class Queue
     include Helper
-    attr_reader :name, :msgs, :users, :ready, :noack, :commit, :acts, :memory
+    attr_reader :name, :msgs, :users, :ready, :noack, :commit, :acts
     @queues = []
 
     def self.all
@@ -38,6 +38,10 @@ module BugsBunny
     def list
       inspect
       EM.add_timer(1) { halt }
+    end
+
+    def memory
+      @memory #"%2.f"
     end
 
     def inspect

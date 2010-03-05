@@ -65,14 +65,6 @@ module BugsBunny
     end
     alias :binds :bindings
 
-    def seed
-      puts "Creating user and vhost"
-      puts `rabbitmqctl add_user #{Opt[:rabbit][:user]} #{Opt[:rabbit][:pass]}`
-      puts `rabbitmqctl add_vhost #{Opt[:rabbit][:vhost]}`
-      puts `rabbitmqctl set_permissions -p #{Opt[:rabbit][:vhost]} #{Opt[:rabbit][:user]} ".*" ".*" ".*"`
-      halt
-    end
-
     def halt(msg=nil)
       BugsBunny::Rabbit.halt(msg)
     end

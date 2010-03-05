@@ -19,9 +19,7 @@ module BugsBunny
           puts "Can`t do that."; exit
         end
         log "Connecting to rabbitmq #{Opt[:rabbit][:vhost]}"
-        AMQP.start(Opt[:rabbit]) do
-          rb.start!(argv)
-        end
+        AMQP.start(Opt[:rabbit]) { rb.start!(argv) }
       end
     end
 
@@ -37,6 +35,14 @@ module BugsBunny
         FileUtils.copy(File.dirname(__FILE__) + "/#{CONFIG_FILE}", path)
         puts "Copied config file to #{path}"
       end
+    end
+
+    def seed
+      parse_config
+      puts "Creating user and vhost"
+      puts `rabbitmqctl add_user #{Opt[:rabbit][:user]} #{Opt[:rabbit][:pass]}`
+      puts `rabbitmqctl add_vhost #{Opt[:rabbit][:vhost]}`
+      puts `rabbitmqctl set_permissions -p #{Opt[:rabbit][:vhost]} #{Opt[:rabbit][:user]} ".*" ".*" ".*"`
     end
 
     private
