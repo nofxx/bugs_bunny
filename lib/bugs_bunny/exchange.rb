@@ -1,6 +1,6 @@
 module BugsBunny
   class Exchange
-    attr_reader :name, :kind, :durable, :delete
+    attr_reader :name, :durable, :delete
 
     def self.parse(txt)
       return nil if txt =~ /Listing|\.\.\./
@@ -13,6 +13,10 @@ module BugsBunny
 
     def <=>(other)
       @name <=> other.name
+    end
+
+    def kind
+      @kind.capitalize
     end
 
     def x(x)

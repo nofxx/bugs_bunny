@@ -7,7 +7,6 @@ RabbitMQ Playground
 
 Run 'bbunny config' to create a rabbitmq.yml conf file, edit it, play.
 
-
 === bbunny queues
 
 Lists all queues in the vhost.
@@ -15,8 +14,8 @@ Lists all queues in the vhost.
     +------+--------------+-------+-------+-------+--------+------+--------+
     | Msgs | Name         | Users | Ready | Noack | Commit | Acts | Memory |
     +------+--------- ----+-------+-------+-------+--------+------+--------+
-    | 0    | (D) works    | 1     | 0     | 0     | 0      | 0    | 4768   |
-    | 0    | (V) todo     | 10    | 0     | 0     | 0      | 0    | 14544  |
+    | 5    | (D) works    | 1     | 5     | 0     | 0      | 0    | 4768   |
+    | 20   | (V) mapper   | 10    | 0     | 20    | 0      | 0    | 14544  |
     ...
 
 
@@ -44,7 +43,7 @@ Live inspection of the queue.
 
     -------
     QUEUE 1 (application/octet-stream): Mode 1
-    Consumer: todo-908051891800 
+    Consumer: todo-908051891800
 
     Body:
     Improve Bugs Bunny
@@ -55,6 +54,21 @@ Live inspection of the queue.
 
     Body:
     {:ruby => "object"}
+
+
+=== bbunny exchanges
+
+    Exchanges
+    +---------------------------------------+---------+-----------+----------+
+    | Name                                  | Kind    | Durable   | Delete   |
+    +---------------------------------------+---------+-----------+----------+
+    | amq.direct                            | Direct  |     X     |          |
+    | amq.fanout                            | Fanout  |     X     |          |
+    | amq.headers                           | Headers |     X     |          |
+    | amq.match                             | Headers |     X     |          |
+    | amq.topic                             | Topic   |     X     |          |
+    | some.fanout                           | Fanout  |           |    X     |
+    ...
 
 
 === Check out -h for all commands
