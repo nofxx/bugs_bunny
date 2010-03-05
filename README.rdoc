@@ -12,8 +12,12 @@ Run 'bbunny config' to create a rabbitmq.yml conf file, edit it, play.
 
 Lists all queues in the vhost.
 
-    works  (volatile): 0 messages
-    todo   (volatile): 0 messages
+    +------+--------------+-------+-------+-------+--------+------+--------+
+    | Msgs | Name         | Users | Ready | Noack | Commit | Acts | Memory |
+    +------+--------- ----+-------+-------+-------+--------+------+--------+
+    | 0    | (D) works    | 1     | 0     | 0     | 0      | 0    | 4768   |
+    | 0    | (V) todo     | 10    | 0     | 0     | 0      | 0    | 14544  |
+    ...
 
 
 === bbunny queues new works
@@ -40,14 +44,14 @@ Live inspection of the queue.
 
     -------
     QUEUE 1 (application/octet-stream): Mode 1
-    Consumer: todo-908051891800 Exchange:
+    Consumer: todo-908051891800 
 
     Body:
     Improve Bugs Bunny
 
     -------
     QUEUE 2 (application/octet-stream): Mode 1
-    Consumer: todo-908051891800 Exchange:
+    Consumer: todo-908051891800
 
     Body:
     {:ruby => "object"}
