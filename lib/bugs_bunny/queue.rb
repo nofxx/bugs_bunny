@@ -1,15 +1,15 @@
 module BugsBunny
-  class Record
+  class Queue
     attr_reader :name, :msgs, :users
-    @records = []
+    @queues = []
 
     def self.all
       # possible with amqp?
       `rabbitmqctl list_queues -p #{Opt[:rabbit][:vhost]} name durable auto_delete arguments node messages_ready messages_unacknowledged messages_uncommitted messages consumers transactions memory`.split("\n").each do |l|
         next if l =~ /Listing|\.\./
-        @records << BugsBunny::Record.new(*l.split("\t"))
+        @queues << BugsBunny::Queue.new(*l.split("\t"))
       end
-      @records
+      @queues
     end
 
     def self.create(name)

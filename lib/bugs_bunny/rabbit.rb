@@ -2,6 +2,7 @@
 module BugsBunny
 
   class Rabbit
+    include Helper
 
     def initialize(params=nil)
     end
@@ -18,12 +19,12 @@ module BugsBunny
     def queues(param=nil,name=nil)
       if param == "new"
         return halt("new <name>") unless name
-        BugsBunny::Record.create(name)
+        BugsBunny::Queue.create(name)
         return halt
       end
-      qs = BugsBunny::Record.all
+      qs = BugsBunny::Queue.all
       unless param
-        print_table "Queues", qs.sort_by { |r| r.msgs }
+        print_table "Queues", qs.sort_by { |r| r.msgs }, :msgs, :name, :users
       else
         qs.each(&:"#{param}")
       end
@@ -31,7 +32,7 @@ module BugsBunny
     end
 
     def queue(q, action="info", *params)
-      rec = BugsBunny::Record.new(q)
+      rec = BugsBunny::Queue.new(q)
       if rec.respond_to?(action)
         rec.send(action, *params)
       else
@@ -44,13 +45,6 @@ module BugsBunny
       print_table "Queues", @mq.exchanges
     end
 
-    def print_table(title, arr)
-      return if arr.empty?
-      puts title
-      arr.each do |q|
-        puts q
-      end
-    end
 
     def halt(msg=nil)
       BugsBunny::Rabbit.halt(msg)

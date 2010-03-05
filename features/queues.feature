@@ -8,7 +8,7 @@ Feature: Managing queues
     Then I should have 1 queues
     When I run "queues"
     Then I should see "todo"
-    And  I should see "0 messages"
+    And  I should see "0"
 
   Scenario: Show queues
     Given a queue "crucification" with 3 messages
@@ -19,10 +19,13 @@ Feature: Managing queues
   Scenario: List queues
     Given I run "queues"
     Then I should see "Queues"
+    And  I should see "Name"
     And  I should see "todo"
     And  I should see "crucification"
-    And  I should see "0 messages"
-    And  I should see "3 messages"
+    And  I should see "Msgs"
+    And  I should see "3"
+    And  I should see "Users"
+    And  I should see "0"
 
   Scenario: Add to queue
     Given a queue "works"

@@ -12,6 +12,7 @@ module BugsBunny
   Opt = {:verbose => false, :force => false, :rabbit => {}}
 end
 
+require "bugs_bunny/helper"
 require "bugs_bunny/cli"
 require "bugs_bunny/rabbit"
-require "bugs_bunny/record"
+require "bugs_bunny/queue"

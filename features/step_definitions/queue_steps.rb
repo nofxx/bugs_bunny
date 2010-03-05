@@ -16,5 +16,5 @@ end
 
 Then /^I should have (\d+) queues*$/ do |n|
   Given 'I run "queues"'
-  @out.split("\n").length.should eql(n.to_i+1)
+  @out.split("\n").length.should eql(n.to_i+6) #table adds 6 lines
 end
