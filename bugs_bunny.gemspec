@@ -5,11 +5,11 @@
 
 Gem::Specification.new do |s|
   s.name = %q{bugs_bunny}
-  s.version = "0.0.9"
+  s.version = "0.1.0"
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["Marcos Piccinini"]
-  s.date = %q{2010-03-03}
+  s.date = %q{2010-03-05}
   s.default_executable = %q{bbunny}
   s.description = %q{Play/Manage RabbitMQ. Vhosts, queues.}
   s.email = %q{x@nofxx.com}
@@ -35,9 +35,10 @@ Gem::Specification.new do |s|
      "features/support/env.rb",
      "lib/bugs_bunny.rb",
      "lib/bugs_bunny/cli.rb",
+     "lib/bugs_bunny/helper.rb",
+     "lib/bugs_bunny/queue.rb",
      "lib/bugs_bunny/rabbit.rb",
      "lib/bugs_bunny/rabbitmq.yml",
-     "lib/bugs_bunny/record.rb",
      "spec/bugs_bunny/cli_spec.rb",
      "spec/bugs_bunny/rabbit_spec.rb",
      "spec/bugs_bunny_spec.rb",
