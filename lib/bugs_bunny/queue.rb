@@ -41,8 +41,10 @@ module BugsBunny
     end
 
     def inspect
-      puts ""
-      @mq.bind(MQ.fanout(@name)).subscribe(:ack => true) do |h, body| #, :nowait => false
+      xchange = MQ.fanout(@name)#, :durable => false, :auto_delete => true)#, :internal => true)
+      mq = MQ.queue(@name+"_bb", :exclusive => true)
+      mq.bind(xchange)
+      mq.subscribe(:ack => true) do |h, body| #, :nowait => false
         print_queue(h, body)
       end
     end

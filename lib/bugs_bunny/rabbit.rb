@@ -31,6 +31,7 @@ module BugsBunny
       end
       halt
     end
+    alias :qu :queues
 
     def queue(q, action="info", *params)
       rec = BugsBunny::Queue.new(q)
@@ -41,11 +42,24 @@ module BugsBunny
         halt
       end
     end
+    alias :q :queue
 
     def exchanges
-      print_table "Queues", @mq.exchanges
-    end
+      arr = `rabbitmqctl list_exchanges -p /nanite name type durable auto_delete arguments`.split("\n").map do |e|
+        BugsBunny::Exchange.parse(e)
+      end.reject(&:nil?).sort
 
+      print_table "Exchanges", arr, :name, :kind, :durable_x, :delete_x
+      halt
+    end
+    alias :ex :exchanges
+
+    def seed
+      puts `rabbitmqctl add_user #{Opt[:rabbit][:user]} #{Opt[:rabbit][:pass]}`
+      puts `rabbitmqctl add_vhost #{Opt[:rabbit][:vhost]}`
+      puts `rabbitmqctl set_permissions -p #{Opt[:rabbit][:vhost]} #{Opt[:rabbit][:user]} ".*" ".*" ".*"`
+      halt
+    end
 
     def halt(msg=nil)
       BugsBunny::Rabbit.halt(msg)

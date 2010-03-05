@@ -49,7 +49,7 @@ module BugsBunny
       end
 
       puts border
-      puts "#{items.length} rows in set\n"
+      puts "#{items.length} items\n"
     end
   end
 end
