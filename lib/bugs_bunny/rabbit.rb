@@ -24,8 +24,8 @@ module BugsBunny
       end
       qs = BugsBunny::Queue.all
       unless param
-        print_table "Queues", qs.sort_by { |r| r.msgs }, :msgs, :name_kind,
-        :users, :ready, :noack, :commit, :acts, :memory
+        print_table "Queues", qs.sort, :msgs, :name_kind,
+          :users, :ready, :noack, :commit, :acts, :memory
       else
         qs.each(&:"#{param}")
       end
@@ -45,7 +45,7 @@ module BugsBunny
     alias :q :queue
 
     def exchanges
-      arr = `rabbitmqctl list_exchanges -p /nanite name type durable auto_delete arguments`.split("\n").map do |e|
+      arr = `rabbitmqctl list_exchanges -p #{Opt[:rabbit][:vhost]} name type durable auto_delete arguments`.split("\n").map do |e|
         BugsBunny::Exchange.parse(e)
       end.reject(&:nil?).sort
 
@@ -54,7 +54,19 @@ module BugsBunny
     end
     alias :ex :exchanges
 
+    def bindings
+      arr = `rabbitmqctl list_bindings -p #{Opt[:rabbit][:vhost]}`.split("\n")
+      arr.map { |l|l.gsub(/^\t/, "") }.sort.each do |l|
+        next if l =~ /Listing|\.\.\./
+        from, to, args = l.split("\t")
+        puts "#{from} <=> #{to}"
+      end
+      halt
+    end
+    alias :binds :bindings
+
     def seed
+      puts "Creating user and vhost"
       puts `rabbitmqctl add_user #{Opt[:rabbit][:user]} #{Opt[:rabbit][:pass]}`
       puts `rabbitmqctl add_vhost #{Opt[:rabbit][:vhost]}`
       puts `rabbitmqctl set_permissions -p #{Opt[:rabbit][:vhost]} #{Opt[:rabbit][:user]} ".*" ".*" ".*"`

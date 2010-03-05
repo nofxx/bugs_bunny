@@ -6,7 +6,7 @@ module BugsBunny
 
     def self.all
       # possible with amqp?
-      `rabbitmqctl list_queues -p #{Opt[:rabbit][:vhost]} name durable auto_delete arguments node messages_ready messages_unacknowledged messages_uncommitted messages consumers transactions memory`.split("\n").each do |l|
+      `rabbitmqctl list_queues -p #{Opt[:rabbit][:vhost]} name durable auto_delete arguments messages_ready messages_unacknowledged messages_uncommitted messages consumers transactions memory`.split("\n").each do |l|
         next if l =~ /Listing|\.\./
         @queues << BugsBunny::Queue.new(*l.split("\t"))
       end
@@ -14,13 +14,13 @@ module BugsBunny
     end
 
     def self.create(name)
-      MQ.queue(name).status do |msg, users|
+      MQ.queue(name, :durable => true).status do |msg, users|
         puts "#{msg} messages, #{users} consumers."
       end
     end
 
     def initialize(*params)
-      @name, d, a, args, @node, @ready, @noack, @commit, @msgs,
+      @name, d, a, args, @ready, @noack, @commit, @msgs,
         @users, @acts, @memory = *params
       @durable = eval(d) if d #ugly
       @auto_delete = eval(a) if a #more ugly
@@ -41,14 +41,15 @@ module BugsBunny
     end
 
     def inspect
-      xchange = MQ.fanout(@name)#, :durable => false, :auto_delete => true)#, :internal => true)
-      mq = MQ.queue(@name+"_bb", :exclusive => true)
-      mq.bind(xchange)
-      mq.subscribe(:ack => true) do |h, body| #, :nowait => false
+      # xchange = MQ.fanout(@name)
+      #, :durable => false, :auto_delete => true)#, :internal => true)
+      #mq = MQ.queue(@name+"_bb", :exclusive => true)
+      @mq.subscribe(:ack => true) do |h, body| #, :nowait => false
         print_queue(h, body)
       end
     end
-    alias :live :inspect
+    alias :live  :inspect
+    alias :watch :inspect
 
     def add(txt)
       @mq.publish(txt)

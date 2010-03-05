@@ -21,7 +21,7 @@ Feature: Managing queues
     Then I should see "Queues"
     And  I should see "Name"
     And  I should see "todo"
-    And  I should see "(V)"
+    And  I should see "(D)"
     And  I should see "crucification"
     And  I should see "Msgs"
     And  I should see "3"
