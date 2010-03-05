@@ -1,6 +1,7 @@
 module BugsBunny
   class Queue
-    attr_reader :name, :msgs, :users
+    include Helper
+    attr_reader :name, :msgs, :users, :ready, :noack, :commit, :acts, :memory
     @queues = []
 
     def self.all
@@ -19,8 +20,8 @@ module BugsBunny
     end
 
     def initialize(*params)
-      @name, d, a,_,_,ready,_,all,@users, @transactions, @mem = *params
-      @msgs = ready.to_i + all.to_i
+      @name, d, a, args, @node, @ready, @noack, @commit, @msgs,
+        @users, @acts, @memory = *params
       @durable = eval(d) if d #ugly
       @auto_delete = eval(a) if a #more ugly
       @mq = MQ.queue(@name, :passive => true)
@@ -42,15 +43,7 @@ module BugsBunny
     def inspect
       puts ""
       @mq.bind(MQ.fanout(@name)).subscribe(:ack => true) do |h, body| #, :nowait => false
-        puts "-------\n"
-        print "QUEUE #{h.delivery_tag} (#{h.content_type}): "
-        print "Redelivered " if h.redelivered
-        puts  "Mode #{h.delivery_mode}"
-        puts  "Consumer: #{h.consumer_tag} Exchange: #{h.exchange}"
-        txt = read(body)
-        puts "\nBody:"
-        puts txt
-        puts
+        print_queue(h, body)
       end
     end
     alias :live :inspect
@@ -83,7 +76,7 @@ module BugsBunny
     end
 
     def to_s
-      "#{@name} #{durable}: #{@msgs} messages"
+      "#{@name} #{kind}: #{@msgs} messages"
     end
 
     def <=>(other)
@@ -91,18 +84,10 @@ module BugsBunny
     end
 
     private
-
-    def read(dump, mode=:marshal)
-      case mode
-      when :marshal then Marshal.load(dump)
-      when :json    then JSON.load(dump)
-      else dump
-      end
-    rescue
-      dump
+    def name_kind
+      "(#{kind[0].chr}) #{@name}"
     end
-
-    def durable
+    def kind
       @durable ? "Durable" : "Volatile"
     end
 

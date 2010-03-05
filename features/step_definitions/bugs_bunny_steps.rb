@@ -1,4 +1,4 @@
-When /^I run "([^\"]*)"$/ do |comm|
+When /^I run [\"|\'](.*)[\"|\']$/ do |comm|
   @out = `bin/bbunny #{comm}`
 end
 

@@ -3,6 +3,7 @@ $LOAD_PATH.unshift(File.join(File.dirname(__FILE__), '..', 'lib'))
 require 'rubygems'
 require 'optparse'
 require 'bugs_bunny'
+include BugsBunny
 
 opt = OptionParser.new do |o|
     o.banner = <<BANNER
@@ -33,6 +34,7 @@ Options:
 BANNER
   o.on('-c CONFIG', "Config file path") { |path| Opt[:config] = path }
   o.on('-p PATH', "Output path for config file") { |path| Opt[:out] = path }
+  o.on('-m MODE', "marshal, json or plain") { |m| Opt[:mode] = m }
   o.on('-v', "--verbose") { |b| Opt[:verbose] = true }
   o.on('-f', "--force") { |b| Opt[:force] = true }
   o.on('-h') { puts o; exit }

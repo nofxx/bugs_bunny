@@ -24,7 +24,8 @@ module BugsBunny
       end
       qs = BugsBunny::Queue.all
       unless param
-        print_table "Queues", qs.sort_by { |r| r.msgs }, :msgs, :name, :users
+        print_table "Queues", qs.sort_by { |r| r.msgs }, :msgs, :name_kind,
+        :users, :ready, :noack, :commit, :acts, :memory
       else
         qs.each(&:"#{param}")
       end

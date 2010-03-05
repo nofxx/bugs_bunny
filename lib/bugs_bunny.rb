@@ -9,7 +9,7 @@ rescue LoadError
 end
 
 module BugsBunny
-  Opt = {:verbose => false, :force => false, :rabbit => {}}
+  Opt = {:verbose => false, :force => false, :rabbit => {}, :mode => :marshal}
 end
 
 require "bugs_bunny/helper"

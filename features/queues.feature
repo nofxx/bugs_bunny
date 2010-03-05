@@ -21,6 +21,7 @@ Feature: Managing queues
     Then I should see "Queues"
     And  I should see "Name"
     And  I should see "todo"
+    And  I should see "(V)"
     And  I should see "crucification"
     And  I should see "Msgs"
     And  I should see "3"
@@ -78,3 +79,10 @@ Feature: Managing queues
     And  I should see "0 messages"
     When I run "queue crucification"
     Then I should see "0 messages"
+
+  Scenario: JSON queues
+    When I run 'queue works add "{\"foo\": 2}"'
+    And  I run "queue works list -m json"
+    Then I should see "QUEUE 1"
+    And  I should see "works"
+    And  I should see "Body"

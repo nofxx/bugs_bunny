@@ -5,3 +5,6 @@
 :pass: testing
 :timeout: 5
 :logging: false
+
+# Dump load mode: (marshal, json, plain)
+:mode: marshal

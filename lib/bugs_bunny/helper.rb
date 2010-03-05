@@ -1,6 +1,23 @@
 module BugsBunny
   module Helper
 
+    def print_queue(h, body)
+      print ["-------\n", "QUEUE #{h.delivery_tag} (#{h.content_type}): ",
+            ("Redelivered " if h.redelivered), "Mode #{h.delivery_mode}",
+            "\nConsumer: #{h.consumer_tag} \nExchange: #{h.exchange}",
+            "\n\nBody:", read_dump(body), "\n"].reject(&:nil?).join
+    end
+
+    def read_dump(dump)
+      case BugsBunny::Opt[:mode].to_sym
+      when :marshal then Marshal.load(dump)
+      when :json    then JSON.load(dump)
+      else dump
+      end
+    rescue
+      dump
+    end
+
     # http://gist.github.com/72234
     def print_table(title, items, *fields)
       return if items.empty?
@@ -17,7 +34,7 @@ module BugsBunny
 
       border = '+-' + fields.map {|f| '-' * max_len[f] }.join('-+-') + '-+'
       title_row = '| ' + fields.map do |f|
-        sprintf("%-#{max_len[f]}s", f.to_s.capitalize)
+        sprintf("%-#{max_len[f]}s", f.to_s.split("_")[0].capitalize)
       end.join(' | ') + ' |'
 
       puts border
