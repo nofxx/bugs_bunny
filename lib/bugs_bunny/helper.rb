@@ -4,7 +4,8 @@ module BugsBunny
     def print_queue(h, body)
       print ["-------\n", "QUEUE #{h.delivery_tag} (#{h.content_type}): ",
             ("Redelivered " if h.redelivered), "Mode #{h.delivery_mode}",
-            "\nConsumer: #{h.consumer_tag} \nExchange: #{h.exchange}",
+            ("\nConsumer: #{h.consumer_tag}" rescue nil),
+             "\nExchange: #{h.exchange}",
             "\n\nBody:", read_dump(body), "\n"].reject(&:nil?).join
     end
 

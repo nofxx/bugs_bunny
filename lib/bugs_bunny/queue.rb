@@ -63,7 +63,7 @@ module BugsBunny
 
     def pop
       @mq.pop do |h, b|
-        puts "Pop => #{h}\n Body => #{b}" if b
+        print_queue(h, b) if b
         halt
       end
     end
