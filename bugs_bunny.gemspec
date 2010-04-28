@@ -5,11 +5,11 @@
 
 Gem::Specification.new do |s|
   s.name = %q{bugs_bunny}
-  s.version = "0.1.1"
+  s.version = "0.1.2"
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["Marcos Piccinini"]
-  s.date = %q{2010-03-05}
+  s.date = %q{2010-04-28}
   s.default_executable = %q{bbunny}
   s.description = %q{Play/Manage RabbitMQ. Vhosts, queues.}
   s.email = %q{x@nofxx.com}
@@ -47,23 +47,27 @@ Gem::Specification.new do |s|
      "spec/spec.opts",
      "spec/spec_helper.rb"
   ]
+  s.has_rdoc = true
   s.homepage = %q{http://github.com/nofxx/bugs_bunny}
   s.rdoc_options = ["--charset=UTF-8"]
   s.require_paths = ["lib"]
-  s.rubygems_version = %q{1.3.6}
+  s.rubygems_version = %q{1.3.1}
   s.summary = %q{Play/Manage RabbitMQ}
   s.test_files = [
-    "spec/bugs_bunny/cli_spec.rb",
+    "spec/bugs_bunny_spec.rb",
+     "spec/bugs_bunny/cli_spec.rb",
      "spec/bugs_bunny/rabbit_spec.rb",
-     "spec/bugs_bunny_spec.rb",
      "spec/spec_helper.rb"
   ]
 
   if s.respond_to? :specification_version then
     current_version = Gem::Specification::CURRENT_SPECIFICATION_VERSION
-    s.specification_version = 3
+    s.specification_version = 2
 
     if Gem::Version.new(Gem::RubyGemsVersion) >= Gem::Version.new('1.2.0') then
+      s.add_runtime_dependency(%q<amqp>, [">= 0.6.7"])
+      s.add_development_dependency(%q<rspec>, [">= 1.2.9"])
+      s.add_development_dependency(%q<cucumber>, [">= 0"])
       s.add_runtime_dependency(%q<amqp>, [">= 0.6.7"])
       s.add_development_dependency(%q<rspec>, [">= 1.2.9"])
       s.add_development_dependency(%q<cucumber>, [">= 0"])
@@ -71,8 +75,14 @@ Gem::Specification.new do |s|
       s.add_dependency(%q<amqp>, [">= 0.6.7"])
       s.add_dependency(%q<rspec>, [">= 1.2.9"])
       s.add_dependency(%q<cucumber>, [">= 0"])
+      s.add_dependency(%q<amqp>, [">= 0.6.7"])
+      s.add_dependency(%q<rspec>, [">= 1.2.9"])
+      s.add_dependency(%q<cucumber>, [">= 0"])
     end
   else
+    s.add_dependency(%q<amqp>, [">= 0.6.7"])
+    s.add_dependency(%q<rspec>, [">= 1.2.9"])
+    s.add_dependency(%q<cucumber>, [">= 0"])
     s.add_dependency(%q<amqp>, [">= 0.6.7"])
     s.add_dependency(%q<rspec>, [">= 1.2.9"])
     s.add_dependency(%q<cucumber>, [">= 0"])

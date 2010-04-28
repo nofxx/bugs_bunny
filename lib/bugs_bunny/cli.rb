@@ -1,7 +1,12 @@
 # Command Line Stuff
 require 'yaml'
+begin # Needed (really?) for ruby 1.9
+  require 'fileutils'
+rescue LoadError
+end
+
 begin # Needed (really?) for ruby 1.8
-  require 'ftools'
+  require 'fileutils'
 rescue LoadError
 end
 
