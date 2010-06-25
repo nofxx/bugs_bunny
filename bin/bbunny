@@ -13,8 +13,10 @@ Usage: #{File.basename($0)} command [args]
 
 Commands:
 
-   vhosts       -   List vhosts
    users        -   List and filter items
+   vhosts       -   List vhosts
+   exchange     -   List exchanges
+   bindings     -   List bindings
    queues       -   List queues
      new        -   Create a new queue
      purge      -   Purge all queues

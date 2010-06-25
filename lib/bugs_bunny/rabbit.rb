@@ -64,6 +64,7 @@ module BugsBunny
       halt
     end
     alias :binds :bindings
+    alias :bi    :bindings
 
     def halt(msg=nil)
       BugsBunny::Rabbit.halt(msg)
